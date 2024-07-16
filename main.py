@@ -39,7 +39,7 @@ styles = {
 }
 
 #Sidebar
-page = st_navbar(["Home", "Documentation", "Disease Recognition", "About",],styles=styles)
+page = st_navbar(["Home",  "Disease Recognition", "About",],styles=styles)
 
 
 #Main Page
@@ -74,7 +74,7 @@ elif(page=="About"):
     st.header("About")
     st.markdown("""
                 #### About Dataset
-                This dataset has been meticulously curated using offline augmentation techniques based on the original dataset, which can be accessed via this [GitHub repository](https://www.kaggle.com/datasets/vipoooool/new-plant-diseases-dataset/data). It encompasses approximately 87,000 RGB images of both healthy and diseased crop leaves, categorized into 38 distinct classes.
+                This dataset has been meticulously curated using offline augmentation techniques based on the original dataset, which can be accessed via this [Kaggle Dataset](https://www.kaggle.com/datasets/vipoooool/new-plant-diseases-dataset/data). It encompasses approximately 87,000 RGB images of both healthy and diseased crop leaves, categorized into 38 distinct classes.
                 The dataset is thoughtfully divided to maintain the directory structure, with an 80/20 split between training and validation sets. Additionally, a new directory containing 33 test images has been created specifically for prediction purposes.
                 #### Content
                 1. train (70295 images)

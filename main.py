@@ -1,20 +1,19 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-from streamlit_navigation_bar import st_navbar
 
 
 # --------------------------------------------------
 # Page config
 # --------------------------------------------------
 st.set_page_config(
-    page_title="Plant Disease Recognition",
+    page_title="Plant Disease Recognition System",
     layout="wide"
 )
 
 
 # --------------------------------------------------
-# Load model (cached)
+# Load model
 # --------------------------------------------------
 @st.cache_resource
 def load_model():
@@ -35,55 +34,12 @@ def model_prediction(test_image):
 
 
 # --------------------------------------------------
-# Navbar styles
+# Sidebar navigation (SAFE)
 # --------------------------------------------------
-styles = {
-    "nav": {"background-color": "rgb(123, 209, 146)"},
-    "span": {
-        "border-radius": "0.5rem",
-        "color": "rgb(49, 51, 63)",
-        "padding": "0.5rem",
-    },
-    "active": {"background-color": "rgba(255,255,255,0.25)"},
-    "hover": {"background-color": "rgba(255,255,255,0.35)"},
-}
-
-
-# --------------------------------------------------
-# Navbar
-# --------------------------------------------------
-page = st_navbar(["Home", "Disease Recognition", "About"], styles=styles)
-
-
-# --------------------------------------------------
-# 🔴 HARD SCROLL FIX (REQUIRED)
-# --------------------------------------------------
-st.markdown(
-    """
-    <style>
-    html, body {
-        height: auto !important;
-        overflow-y: auto !important;
-    }
-
-    main {
-        height: auto !important;
-        overflow-y: auto !important;
-    }
-
-    section[data-testid="stAppViewContainer"] {
-        height: auto !important;
-        overflow-y: auto !important;
-    }
-
-    div.block-container {
-        height: auto !important;
-        overflow-y: auto !important;
-        padding-bottom: 6rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
+st.sidebar.title("Navigation")
+page = st.sidebar.radio(
+    "",
+    ["Home", "Disease Recognition", "About"]
 )
 
 
@@ -91,65 +47,60 @@ st.markdown(
 # HOME PAGE
 # --------------------------------------------------
 if page == "Home":
-    with st.container():
-        st.header("PLANT DISEASE RECOGNITION SYSTEM")
+    st.header("PLANT DISEASE RECOGNITION SYSTEM")
 
-        st.image("home_page.jpg", use_container_width=True)
+    st.image("home_page.jpg", use_container_width=True)
 
-        st.markdown("""
-        Welcome to the **Plant Disease Recognition System**.
+    st.markdown("""
+    Welcome to the **Plant Disease Recognition System**.
 
-        This application uses a deep learning model to detect plant diseases
-        from leaf images and helps farmers and researchers take timely action.
+    This application uses a deep learning model to identify plant diseases
+    from leaf images and provide fast, reliable predictions.
 
-        ### How it works
-        1. Upload an image of a plant leaf
-        2. The model analyzes the image
-        3. Disease prediction is displayed instantly
+    ### How It Works
+    1. Upload a plant leaf image  
+    2. The model analyzes the image  
+    3. The predicted disease is displayed  
 
-        Navigate to **Disease Recognition** to begin.
-        """)
+    Navigate to **Disease Recognition** from the sidebar to begin.
+    """)
 
 
 # --------------------------------------------------
 # ABOUT PAGE
 # --------------------------------------------------
 elif page == "About":
-    with st.container():
-        st.header("About the Project")
+    st.header("About")
 
-        st.markdown("""
-        #### Dataset
-        The dataset is derived from the *New Plant Diseases Dataset* on Kaggle.
+    st.markdown("""
+    #### Dataset Information
 
-        - **Total images:** ~87,000
-        - **Classes:** 38 plant disease categories
-        - **Train:** 70,295 images  
-        - **Validation:** 17,572 images  
-        - **Test:** 33 images  
+    - ~87,000 RGB images
+    - 38 disease and healthy plant classes
+    - Offline augmentation applied
 
-        Offline data augmentation was used to improve robustness and accuracy.
-        """)
+    **Split**
+    - Train: 70,295 images  
+    - Validation: 17,572 images  
+    - Test: 33 images  
+    """)
 
 
 # --------------------------------------------------
 # DISEASE RECOGNITION PAGE
 # --------------------------------------------------
 elif page == "Disease Recognition":
-    with st.container():
-        st.header("Disease Recognition")
+    st.header("Disease Recognition")
 
-        test_image = st.file_uploader(
-            "Upload a plant leaf image",
-            type=["jpg", "jpeg", "png"]
-        )
+    test_image = st.file_uploader(
+        "Upload a plant leaf image",
+        type=["jpg", "jpeg", "png"]
+    )
 
-        if test_image and st.button("Show Image"):
-            st.image(test_image, use_container_width=True)
+    if test_image:
+        st.image(test_image, use_container_width=True)
 
-        if test_image and st.button("Predict"):
-            st.subheader("Prediction")
-
+        if st.button("Predict"):
             result_index = model_prediction(test_image)
 
             class_name = [
